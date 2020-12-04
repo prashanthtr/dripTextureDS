@@ -21,7 +21,7 @@ Generating synthetic drip Textures using frequency sweep
 
 >> jupyter notebook
 
->> Select *popTexture-notebook.ipynb* in the browser interface
+>> Select *dripTextureVisualization-notebook.ipynb* in the browser interface
 
 # Generate files from commandline
 
