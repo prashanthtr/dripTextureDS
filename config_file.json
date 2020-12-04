@@ -1,6 +1,6 @@
 {
 
-	"soundname": "pop_sound",
+	"soundname": "drip_sound",
 	"samplerate": 16000,
 	"format": "params",
 	"numVariations": 2,
@@ -26,11 +26,11 @@
 		},
 		{
 			"pname": "cf",
-        	"minval": 0,
-    	    "maxval": 1,
-	        "nvals": 2,
+      "minval": 0,
+    	"maxval": 1,
+	    "nvals": 2,
 			"nargs": 1,
-	        "units": "Frequency",
+	    "units": "Frequency",
 			"formula": "440**args[0]"
 		}
 	]
