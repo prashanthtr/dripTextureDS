@@ -1,15 +1,15 @@
 # popTextureDS
-Generating synthetic popTextures
+Generating synthetic drip Textures using frequency sweep
 
 # User instructions
 
-  >> git clone https://github.com/prashanthtr/popTextureDS.git
-  
-  >> cd popTextureDS/
-  
-  >> conda create -n popTextureDS python=3.6 ipykernel
-  
-  >> conda activate popTextureDS
+  >> git clone https://github.com/prashanthtr/dripTextureDS.git
+
+  >> cd dripTextureDS/
+
+  >> conda create -n dripTextureDS python=3.6 ipykernel
+
+  >> conda activate dripTextureDS
 
   >> pip install -r requirements.txt --src '.' (please run twice - due to numba dependency error)
 
@@ -17,7 +17,7 @@ Generating synthetic popTextures
 
 >> pip install jupyter
 
->> python -m ipykernel install --user --name popTextureDS
+>> python -m ipykernel install --user --name dripTextureDS
 
 >> jupyter notebook
 
