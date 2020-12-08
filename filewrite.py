@@ -26,6 +26,7 @@ class sound2File():
         for paramNum in range(len(paramArr)):
             self.fname = self.fname + '--' + paramArr[paramNum]['pname'] + '-'+'{:05.2f}'.format(enumP[paramNum])
         self.fname = self.fname + '--v-'+'{:03}'.format(v)
+        print(self.fname)
 
     def __getFile__(self):
         return self.fname

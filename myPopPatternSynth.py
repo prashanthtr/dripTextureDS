@@ -7,20 +7,20 @@ from myDrip import MyDrip  # This is "event" synthesizer this pattern synth will
 ################################################################################################################
 class MyPopPatternSynth(SI.MySoundModel) :
 
-	def __init__(self, f0=440, f1=880, rate_exp=0, irreg_exp=1) :
+	def __init__(self, cf=440, Q=50, rate_exp=0, irreg_exp=1) :
 
                 SI.MySoundModel.__init__(self)
 		#create a dictionary of the parameters this synth will use
-                self.__addParam__("f0", 100, 2000, f0,
+                self.__addParam__("cf", 100, 2000, cf,
 			lambda v :
-				self.evSynth.setParam('f0', v))
-                self.__addParam__("f1", 100, 2000, f1,
+				self.evSynth.setParam('cf', v))
+                self.__addParam__("Q", 0.1, 50, Q,
 			lambda v :
-                                self.evSynth.setParam('f1', v))
+                                self.evSynth.setParam('Q', v))
                 self.__addParam__("rate_exp", -10, 10, rate_exp)
                 self.__addParam__("irreg_exp", .1, 50, irreg_exp)
 
-                self.evSynth=MyDrip(f0,f1)
+                self.evSynth=MyDrip(cf,Q)
 
 	'''
 		Override of base model method
@@ -38,11 +38,11 @@ class MyPopPatternSynth(SI.MySoundModel) :
                         startsamp=int(round(nf*self.sr))%numSamples
                         # create some deviation in center frequency
                         cfsd = 1
-                        perturbedf0 = self.getParam("f0")*np.power(2,np.random.normal(scale=cfsd)/12)
-                        perturbedf1 = self.getParam("f1")*np.power(2,np.random.normal(scale=cfsd)/12)
+                        perturbedf0 = self.getParam("cf")*np.power(2,np.random.normal(scale=cfsd)/12)
+                        #perturbedf1 = self.getParam("f1")*np.power(2,np.random.normal(scale=cfsd)/12)
 
-                        self.evSynth.setParam("f0", perturbedf0)
-                        self.evSynth.setParam("f1", perturbedf1)
+                        self.evSynth.setParam("cf", perturbedf0)
+                        #self.evSynth.setParam("f1", perturbedf1)
                         sig = SI.addin(self.evSynth.generate(1), sig, startsamp)
 
                 return sig
