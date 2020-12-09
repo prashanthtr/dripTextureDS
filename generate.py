@@ -96,7 +96,7 @@ for enumP in enumParam: # caretesian product of lists
 
                 '''Write params'''
                 paramName = fileHandle.makeName(data['soundname'], paramArr, enumP, v)
-                pfName = fileHandle.makeFullPath(data["outpath"], paramName,".params")
+                pfName = fileHandle.makeFullPath(data["outPath"], paramName,".params")
 
                 pm=paramManager.paramManager(pfName, fileHandle.getFullPath())
                 pm.initParamFiles(overwrite=True)
