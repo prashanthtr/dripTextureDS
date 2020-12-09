@@ -21,8 +21,8 @@ class MyDrip(MySoundModel) :
         def __init__(self, cf=440, Q=10) :
                 MySoundModel.__init__(self)
                 #create a dictionary of the parameters this synth will use
-                self.__addParam__("cf", 100, 2000, cf)
-                self.__addParam__("Q", .1, 50, Q)
+                self.__addParam__("cf", 220, 440, cf)
+                self.__addParam__("Q", .1, 70, Q)
 
         '''
         Override of base model method

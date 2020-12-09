@@ -11,8 +11,8 @@ import librosa # conda install -c conda-forge librosa
 
 from parammanager import paramManager
 import synthInterface as SI
-from myPopPatternSynth import MyPopPatternSynth
-from filewrite import sound2File
+from myPopPatternSynth import MyDripPatternSynth
+from filewrite import fileHandler
 
 #from Tf_record import tfrecordManager
 
@@ -54,8 +54,7 @@ sr = data['samplerate']
 
 
 '''Initializes file through a filemanager'''
-wavHandle = sound2File(data["outPath"], ".wav")
-paramHandle = sound2File(data["outPath"], ".params")
+fileHandle = fileHandler()
 
 print("Enumerating parameter combinations..")
 
@@ -76,7 +75,7 @@ enumParam = list(itertools.product(*cartParam))
 for enumP in enumParam: # caretesian product of lists
 
         #set parameters
-        barsynth=MyPopPatternSynth()
+        barsynth=MyDripPatternSynth()
 
         barsynth.setParam("rate_exp", enumP[0]) # will make 2^1 events per second
         barsynth.setParam("irreg_exp", enumP[1])
@@ -90,15 +89,16 @@ for enumP in enumParam: # caretesian product of lists
         for v in range(data['numVariations']):
 
                 '''Write wav'''
-                wavHandle.__makeName__(data['soundname'], paramArr, enumP, v)
+                wavName = fileHandle.makeName(data['soundname'], paramArr, enumP, v)
+                wavPath = fileHandle.makeFullPath(data["outpath"],wavName,".wav")
                 chunkedAudio = SI.selectVariation(barsig, sr, v, varDurationSecs)
-                wavHandle.__writeFile__(chunkedAudio, sr)
+                sf.write(wavPath, chunkedAudio, sr)
 
                 '''Write params'''
-                paramHandle.__makeName__(data['soundname'], paramArr, enumP, v)
+                paramName = fileHandle.makeName(data['soundname'], paramArr, enumP, v)
+                pfName = fileHandle.makeFullPath(data["outpath"], paramName,".params")
 
-                pfName = paramHandle.__getFile__()
-                pm=paramManager.paramManager(pfName, paramHandle.__getOutpath__())
+                pm=paramManager.paramManager(pfName, fileHandle.getFullPath())
                 pm.initParamFiles(overwrite=True)
                 for pnum in range(len(paramArr)):
                         pm.addParam(pfName, paramArr[pnum]['pname'], [0,data['soundDuration']], [enumP[pnum], enumP[pnum]], units=paramArr[pnum]['units'], nvals=paramArr[pnum]['nvals'], minval=paramArr[pnum]['minval'], maxval=paramArr[pnum]['maxval'])
