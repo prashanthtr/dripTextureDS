@@ -79,8 +79,8 @@ for enumP in enumParam: # caretesian product of lists
 
         barsynth.setParam("rate_exp", enumP[0]) # will make 2^1 events per second
         barsynth.setParam("irreg_exp", enumP[1])
-        barsynth.setParam("cf", enumP[2])
-        #barsynth.setParam("Q", 40)
+        barsynth.setParamNorm("cf", enumP[2])
+        barsynth.setParam("Q", 70)
 
         barsig=barsynth.generate(data["soundDuration"])
 
