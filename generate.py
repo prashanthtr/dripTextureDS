@@ -90,7 +90,7 @@ for enumP in enumParam: # caretesian product of lists
 
                 '''Write wav'''
                 wavName = fileHandle.makeName(data['soundname'], paramArr, enumP, v)
-                wavPath = fileHandle.makeFullPath(data["outpath"],wavName,".wav")
+                wavPath = fileHandle.makeFullPath(data["outPath"],wavName,".wav")
                 chunkedAudio = SI.selectVariation(barsig, sr, v, varDurationSecs)
                 sf.write(wavPath, chunkedAudio, sr)
 
