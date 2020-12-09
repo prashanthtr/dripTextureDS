@@ -18,7 +18,7 @@ Generating synthetic drip Textures using frequency sweep
 
 >> pip install jupyter
 
->> python -m ipykernel install --user --name dripTextureDS
+>> python3 -m ipykernel install --user --name dripTextureDS
 
 >> jupyter notebook
 
@@ -26,4 +26,4 @@ Generating synthetic drip Textures using frequency sweep
 
 # Generate files from commandline
 
->> python generate.py config_file.json
+>> python3 generate.py config_file.json
