@@ -11,7 +11,7 @@ import librosa # conda install -c conda-forge librosa
 
 from parammanager import paramManager
 import synthInterface as SI
-from myPopPatternSynth import MyDripPatternSynth
+from MyDripPatternSynth import MyDripPatternSynth
 from filewrite import fileHandler
 
 #from Tf_record import tfrecordManager

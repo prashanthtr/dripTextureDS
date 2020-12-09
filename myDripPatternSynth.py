@@ -41,7 +41,7 @@ class MyDripPatternSynth(SI.MySoundModel) :
                         perturbedf0 = self.getParam("cf")*np.power(2,np.random.normal(scale=cfsd)/12)
                         #perturbedf1 = self.getParam("f1")*np.power(2,np.random.normal(scale=cfsd)/12)
 
-                        self.evSynth.setParam("cf", perturbedf0)
+                        #self.evSynth.setParam("cf", perturbedf0)
                         #self.evSynth.setParam("f1", perturbedf1)
                         sig = SI.addin(self.evSynth.generate(1), sig, startsamp)
 

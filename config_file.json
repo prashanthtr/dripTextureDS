@@ -11,7 +11,7 @@
 		{
 			"pname": "rate",
 			"minval": 0,
-			"maxval": 3,
+			"maxval": 4,
 			"nvals": 2,
 			"units": "rate = 2*exp",
 			"formula": "2**args[0]"
