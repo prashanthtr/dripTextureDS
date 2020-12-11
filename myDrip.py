@@ -12,8 +12,8 @@ from synthInterface import MySoundModel
 3. CF is specified at the user level.
 3. Three synthesizer specific parameters control the timbre of the drip sound: <br>
     3.1 Sweep : Range of frequencies traveresed for the frequency sweep.
-    3.2 Decay : Controls Number of samples after which the signal is attentuated
-    3.3 DecayVar : Variation on the center decay rate <br>
+    3.2 Decay : Controls the time after which the drip signal is attentuated.
+    3.3 DecayVar : Variation on the center decay time <br>
 4. A synthesizer loop runs through the parameter values for a specified duration to generate drip audio samples
 '''
 
