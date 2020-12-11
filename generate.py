@@ -77,10 +77,15 @@ for enumP in enumParam: # caretesian product of lists
         #set parameters
         barsynth=MyDripPatternSynth()
 
+        # user level parameters
         barsynth.setParam("rate_exp", enumP[0]) # will make 2^1 events per second
         barsynth.setParam("irreg_exp", enumP[1])
         barsynth.setParamNorm("cf", enumP[2])
-        barsynth.setParam("Q", 70)
+
+        # Synth level parameters
+        barsynth.setParam("sweep", 70)
+        barsynth.setParam("decay", 5) # static for now, but can be configured
+        barsynth.setParam("decayVar", 2)
 
         barsig=barsynth.generate(data["soundDuration"])
 
