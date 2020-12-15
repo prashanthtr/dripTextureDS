@@ -7,27 +7,27 @@ from myDrip import MyDrip  # This is "event" synthesizer this pattern synth will
 ################################################################################################################
 class MyDripPatternSynth(SI.MySoundModel) :
 
-	def __init__(self, cf=440, sweep=50, decay = 5, decayVar =2, rate_exp=0, irreg_exp=1) :
+	def __init__(self, cf=440, sweep=50, startAmp = 1, ampRange =0.25, rate_exp=0, irreg_exp=1) :
 
                 SI.MySoundModel.__init__(self)
 		#create a dictionary of the parameters this synth will use
-                self.__addParam__("cf", 220, 440, cf,
+                self.__addParam__("cf", 55, 220, cf,
 			lambda v :
 				self.evSynth.setParam('cf', v))
-                self.__addParam__("sweep", 0.1, 70, sweep,
+                self.__addParam__("sweep", 55, 220, sweep,
 			lambda v :
                                 self.evSynth.setParam('sweep', v))
-                self.__addParam__("decay", 0, 10, decay,
+                self.__addParam__("startAmp", 0, 2, startAmp,
 			          lambda v :
-				  self.evSynth.setParam('decay', v))
-                self.__addParam__("decayVar", 0, 10, decayVar,
+				  self.evSynth.setParam('startAmp', v))
+                self.__addParam__("ampRange", 0, 1, ampRange,
 			          lambda v :
-				  self.evSynth.setParam('decayVar', v))
+				  self.evSynth.setParam('ampRange', v))
 
                 self.__addParam__("rate_exp", -10, 10, rate_exp)
                 self.__addParam__("irreg_exp", .1, 50, irreg_exp)
 
-                self.evSynth=MyDrip(cf,sweep, decay, decayVar)
+                self.evSynth=MyDrip(cf,sweep, startAmp, ampRange)
 
 	'''
 		Override of base model method

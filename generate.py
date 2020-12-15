@@ -83,9 +83,9 @@ for enumP in enumParam: # caretesian product of lists
         barsynth.setParamNorm("cf", enumP[2])
 
         # Synth level parameters
-        barsynth.setParam("sweep", 70)
-        barsynth.setParam("decay", 5) # static for now, but can be configured
-        barsynth.setParam("decayVar", 2)
+        barsynth.setParamNorm('sweep', 1) # Can set any synth parameter with setParam()
+        barsynth.setParamNorm('startAmp', 1) # Can set any synth parameter with setParam()
+        barsynth.setParamNorm('ampRange', 0.25) # Can set any synth parameter with setParam()
 
         barsig=barsynth.generate(data["soundDuration"])
 

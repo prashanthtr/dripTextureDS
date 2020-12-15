@@ -114,3 +114,13 @@ def addin(a,b,startsamp) :
 def selectVariation(sig, sr, varNum, varDurationSecs):
         variationSamples=math.floor(sr*varDurationSecs)
         return sig[varNum*variationSamples:(varNum+1)*variationSamples]
+
+
+'''Gestures are transformation function specifying changes about an aspect of a
+sound over time. Used for creating amplitude envelopes or frequency sweeps.'''
+def gesture(startVal, stopVal, cutOff, numSamples):
+        gesture = np.zeros(numSamples)
+        non_zero = np.linspace(startVal, stopVal, int(cutOff*numSamples))
+        for index in range(len(non_zero)):
+                gesture[index] = non_zero[index]
+        return gesture
