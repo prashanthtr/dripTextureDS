@@ -75,3 +75,9 @@ class MyDrip(SI.MySoundModel) :
                         synth_output.append(val)
 
                 return synth_output
+
+        ''' Print all the parameters and their ranges from the synth'''
+        def printParams(self):
+                paramVals = self.paramProps()
+                for params in paramVals:
+                        print( "Name: ", params.name, " Default value : ", params.val, " Max value ", params.max, " Min value ", params.min )

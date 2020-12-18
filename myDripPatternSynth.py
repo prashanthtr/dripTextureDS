@@ -1,7 +1,7 @@
 import numpy as np
 import math
 
-import synthInterface as SI
+from genericsynth import synthInterface as SI
 from myDrip import MyDrip  # This is "event" synthesizer this pattern synth will use
 
 ################################################################################################################
