@@ -1,4 +1,3 @@
-
 # dependencies for file reading
 import json
 import sys
@@ -10,6 +9,8 @@ import soundfile as sf
 import librosa # conda install -c conda-forge librosa
 
 from parammanager import paramManager
+from sonyganformat import sonyGanJson
+
 from genericsynth import synthInterface as SI
 from myDripPatternSynth import MyDripPatternSynth
 from filewrite import fileHandler
@@ -17,7 +18,7 @@ from filewrite import fileHandler
 #from Tf_record import tfrecordManager
 
 '''
-This code will generate a dataset of textures consiting of pops. A 'pop' is a burst of noise filtered by a bandpass filter.
+This code will generate a dataset of textures consiting of drip. A 'pop' is a frequency sweep with an amplitude envelope.
 
 The files are generated using 3 different parameters that are sampled over a range of values. The three parameters affect:
     rate (average events per second),
@@ -51,7 +52,12 @@ with open(sys.argv[1]) as json_file:
                 paramArr.append(p)
 
 sr = data['samplerate']
-
+soundName = data["soundname"]
+outPath = data["outPath"]
+recordFormat = data["recordFormat"]
+paramRange = data["paramRange"]
+soundDuration = data["soundDuration"]
+numVariations = data["numVariations"]
 
 '''Initializes file through a filemanager'''
 fileHandle = fileHandler()
@@ -60,54 +66,90 @@ print("Enumerating parameter combinations..")
 
 '''
 	for every combination of cartesian parameter
-	for every variation
+    for every variation
 		Create variation wav files
 		Create variation parameter files
 '''
 
-cartParam = []
+'''2 arrays for normalised and naturalised ranges'''
+userRange = []
+synthRange = []
 
-for p in paramArr:
-        cartParam.append(np.linspace(p["minval"], p["maxval"], p["nvals"], endpoint=True))
+if paramRange == "Norm":
+    for p in paramArr:
+        userRange.append(np.linspace(p["minval"], p["maxval"], p["nvals"], endpoint=True))    
+    for p in paramArr:
+        synthRange.append(np.linspace(p["minval"], p["maxval"], p["nvals"], endpoint=True))
+else:
+    for p in paramArr:
+        userRange.append(np.linspace(p["minval"], p["maxval"], p["nvals"], endpoint=True))    
+    for p in paramArr:
+        synthRange.append(np.linspace(p["minval"], p["maxval"], p["nvals"], endpoint=True))
 
-enumParam = list(itertools.product(*cartParam))
+userParam = list(itertools.product(*userRange))
+synthParam = list(itertools.product(*synthRange))
 
-for enumP in enumParam: # caretesian product of lists
+sg = sonyGanJson.SonyGanJson(data['soundname'],1, 16000, "dripTextureDS")
+
+for index in range(len(userParam)): # caretesian product of lists
+
+        userP = userParam[index]
+        synthP = synthParam[index]
 
         #set parameters
         barsynth=MyDripPatternSynth()
 
-        # user level parameters
-        barsynth.setParam("rate_exp", enumP[0]) # will make 2^1 events per second
-        barsynth.setParam("irreg_exp", enumP[1])
-        barsynth.setParamNorm("cf", enumP[2])
+        if paramRange == "Norm":
+            barsynth.setParamNorm("rate_exp", synthP[0]) # will make 2^1 events per second
+            barsynth.setParamNorm("irreg_exp", synthP[1])
+            barsynth.setParamNorm("cf_exp", synthP[2])
+        else:
+            barsynth.setParam("rate_exp", synthP[0]) # will make 2^1 events per second
+            barsynth.setParam("irreg_exp", synthP[1])
+            barsynth.setParam("cf_exp", synthP[2])
 
-        # Synth level parameters
-        barsynth.setParamNorm('sweep', 1) # Can set any synth parameter with setParam()
-        barsynth.setParamNorm('startAmp', 1) # Can set any synth parameter with setParam()
-        barsynth.setParamNorm('ampRange', 0.25) # Can set any synth parameter with setParam()
+        barsig=barsynth.generate(soundDuration)
+        varDurationSecs=soundDuration/numVariations  #No need to floor this?
 
-        barsig=barsynth.generate(data["soundDuration"])
-
-        varDurationSecs=data["soundDuration"]/data["numVariations"]  #No need to floor this?
-
-        for v in range(data['numVariations']):
+        for v in range(numVariations):
 
                 '''Write wav'''
-                wavName = fileHandle.makeName(data['soundname'], paramArr, enumP, v)
-                wavPath = fileHandle.makeFullPath(data["outPath"],wavName,".wav")
+                wavName = fileHandle.makeName(soundName, paramArr, userP, v)
+                wavPath = fileHandle.makeFullPath(outPath,wavName,".wav")
                 chunkedAudio = SI.selectVariation(barsig, sr, v, varDurationSecs)
                 sf.write(wavPath, chunkedAudio, sr)
 
                 '''Write params'''
-                paramName = fileHandle.makeName(data['soundname'], paramArr, enumP, v)
-                pfName = fileHandle.makeFullPath(data["outPath"], paramName,".params")
+                paramName = fileHandle.makeName(soundName, paramArr, userP, v)
+                pfName = fileHandle.makeFullPath(outPath, paramName,".params")
 
-                pm=paramManager.paramManager(pfName, fileHandle.getFullPath())
-                pm.initParamFiles(overwrite=True)
-                for pnum in range(len(paramArr)):
-                        pm.addParam(pfName, paramArr[pnum]['pname'], [0,data['soundDuration']], [enumP[pnum], enumP[pnum]], units=paramArr[pnum]['units'], nvals=paramArr[pnum]['nvals'], minval=paramArr[pnum]['minval'], maxval=paramArr[pnum]['maxval'])
+                if recordFormat == "params" or recordFormat==0:
+                    pm=paramManager.paramManager(pfName, fileHandle.getFullPath())
+                    pm.initParamFiles(overwrite=True)
+                    for pnum in range(len(paramArr)):
+                            pm.addParam(pfName, paramArr[pnum]['pname'], [0,soundDuration], [userP[pnum], userP[pnum]], units=paramArr[pnum]['units'], nvals=paramArr[pnum]['nvals'], minval=paramArr[pnum]['minval'], maxval=paramArr[pnum]['maxval'], origUnits=None, origMinval=barsynth.getParam(paramArr[pnum]['pname']+"_exp", "min"), origMaxval=barsynth.getParam(paramArr[pnum]['pname']+"_exp", "max"))
+                            if paramRange == "Norm":
+                                synthmin = barsynth.getParam(paramArr[pnum]['pname']+"_exp", "min")
+                                synthmax = barsynth.getParam(paramArr[pnum]['pname']+"_exp", "max")
+                                pm.addMetaParam(pfName, paramArr[pnum]['pname'], 
+                                    {
+                                    "user": "User maps parameters in Normalized units from 0-1 to " + str(paramArr[pnum]['minval']) + "-" + str(paramArr[pnum]['maxval']), 
+                                    "synth": "Synth maps parameters from " + str(paramArr[pnum]['minval']) + "-" + str(paramArr[pnum]['maxval']) + " to " + str(synthmin + paramArr[pnum]['minval']*(synthmax-synthmin)) + "-" + str(synthmin + paramArr[pnum]['maxval']*(synthmax-synthmin))
+                                    })
+                                # pm.addMetaParam(pfName, paramArr[pnum]['pname']+"_synth", "Synth parameters in Normalized units from " + str(paramArr[pnum]['minval']) + " to " + str(paramArr[pnum]['maxval']))
+                            else:
+                                pm.addMetaParam(pfName, paramArr[pnum]['pname'], {"user": "User maps " + paramRange + " units from " + str(paramArr[pnum]['minval']) + "->" + str(paramArr[pnum]['maxval']), "synth": "Synth maps in " + paramRange + " units from " + str(paramArr[pnum]['minval']) + "->" + str(paramArr[pnum]['maxval'])})
+                                # pm.addMetaParam(pfName, paramArr[pnum]['pname']+"_user", "User parameters in " + paramRange + " units from " + paramArr[pnum]['minval'] + " to " + paramArr[pnum]['maxval'])
+                                # pm.addMetaParam(pfName, paramArr[pnum]['pname']+"_synth", "Synth parameters in " + paramRange + " units from " + barsynth.getParam(paramArr[pnum]['pname']+"_exp", "min") + " to " + barsynth.getParam(paramArr[pnum]['pname']+"_exp", "max"))
 
+                elif recordFormat == "sonyGan" or outType == 1:
+
+                    sg.storeSingleRecord(wavName)
+                    for pnum in range(len(paramArr)):
+                        sg.addParams(wavName, paramArr[pnum]['pname'], userP[pnum], barsynth.getParam(paramArr[pnum]['pname']+"_exp"))
+                    sg.write2File("sonyGan.json")
+                else:
+                    print("Tfrecords")
                 '''write TF record'''
 
 		#tfm=tfrecordManager.tfrecordManager(vFilesParam[v], outPath)

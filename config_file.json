@@ -2,10 +2,11 @@
 
 	"soundname": "drip_sound",
 	"samplerate": 16000,
-	"format": "params",
 	"numVariations": 2,
 	"soundDuration": 4,
 	"outPath": "drip_sound",
+	"recordFormat": "params",
+	"paramRange": "Natural",
 	"params":
 	[
 		{
@@ -25,12 +26,12 @@
 			"formula": ".04*10**args[0]/args[1]"
 		},
 		{
-			"pname": "cf",
-      "minval": 0,
-    	"maxval": 1,
-	    "nvals": 2,
+			"pname": "cf",	
+			"minval": 140,
+    		"maxval": 440,
+	    	"nvals": 2,
 			"nargs": 1,
-	    "units": "Frequency",
+	    	"units": "Frequency",
 			"formula": "440**args[0]"
 		}
 	]
