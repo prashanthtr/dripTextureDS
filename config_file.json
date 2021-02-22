@@ -1,11 +1,11 @@
 {
 
-	"soundname": "drip_sound",
+	"soundname": "Drip",
 	"samplerate": 16000,
-	"numVariations": 2,
+	"chunkSecs": 2,
 	"soundDuration": 4,
-	"outPath": "drip_sound",
-	"recordFormat": "params",
+	"outPath": "Drip",
+	"recordFormat": "sonyGan",
 	"paramRange": "Natural",
 	"params":
 	[

@@ -89,7 +89,7 @@ else:
 userParam = list(itertools.product(*userRange))
 synthParam = list(itertools.product(*synthRange))
 
-sg = sonyGanJson.SonyGanJson(data['soundname'],1, 16000, "dripTextureDS")
+sg = sonyGanJson.SonyGanJson(data['soundname'],1, 16000, data['soundname'])
 
 for index in range(len(userParam)): # caretesian product of lists
 
