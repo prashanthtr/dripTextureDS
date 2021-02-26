@@ -26,4 +26,4 @@ Generating synthetic drip Textures using frequency sweep
 
 # Generate files from commandline
 
->> python3 DSGenerator/generate.py --configfile config_file.json
+>> python3 DSGenerator/generate.py --configfile config_file.json --outputpath NewDrip
