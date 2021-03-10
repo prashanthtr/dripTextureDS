@@ -5,15 +5,15 @@ from genericsynth import synthInterface as SI
 from myDrip import MyDrip  # This is "event" synthesizer this pattern synth will use
 
 ################################################################################################################
-class PatternSynth(SI.MySoundModel) :
+class DripPatternSynth(SI.MySoundModel) :
 
 	def __init__(self, cf=440, sweep=50, startAmp = 1, ampRange =0.25, rate_exp=0, irreg_exp=1) :
 
                 SI.MySoundModel.__init__(self)
 		#create a dictionary of the parameters this synth will use
-                self.__addParam__("cf", 55, 220, cf, "Pertubations with semitones",
+                self.__addParam__("cf", 55, 220, cf,
 			lambda v :
-				self.evSynth.setParam('cf', v))
+				self.evSynth.setParam('cf', v), "Pertubations with semitones")
                 self.__addParam__("sweep", 55, 220, sweep,
 			lambda v :
                                 self.evSynth.setParam('sweep', v))
@@ -24,8 +24,8 @@ class PatternSynth(SI.MySoundModel) :
 			          lambda v :
 				  self.evSynth.setParam('ampRange', v))
 
-                self.__addParam__("rate_exp", -10, 10, rate_exp, "Exponential rate")
-                self.__addParam__("irreg_exp", .1, 50, irreg_exp, "Exponential irregularity")
+                self.__addParam__("rate_exp", -10, 10, rate_exp, None, "Exponential rate")
+                self.__addParam__("irreg_exp", .1, 50, irreg_exp, None, "Exponential irregularity")
 
                 self.evSynth=MyDrip(cf,sweep, startAmp, ampRange)
 
