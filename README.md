@@ -11,14 +11,13 @@ Generating synthetic drip Textures using frequency sweep
 
   >> conda activate dripTextureDS
 
-  >> python3 -m pip install -r requirements.txt --src '.' (use Python3 command
-  >before to ensure version compatability)
+  >> pip install -r requirements.txt --src '.' 
 
 # Setup and run jupyter notebook
 
 >> pip install jupyter
 
->> python3 -m ipykernel install --user --name dripTextureDS
+>> python3.8 -m ipykernel install --user --name dripTextureDS
 
 >> jupyter notebook
 
@@ -26,4 +25,4 @@ Generating synthetic drip Textures using frequency sweep
 
 # Generate files from commandline
 
->> python3 DSGenerator/generate.py --configfile config_file.json --outputpath NewDrip
+>> python DSGenerator/generate.py --configfile config_file.json --outputpath NewDrip
