@@ -7,7 +7,7 @@ Generating synthetic drip Textures using frequency sweep
 
   >> cd dripTextureDS/
 
-  >> conda create -n dripTextureDS python=3.8 ipykernel
+  >> conda create -n dripTextureDS python=3.8 ipykernel numba
 
   >> conda activate dripTextureDS
 

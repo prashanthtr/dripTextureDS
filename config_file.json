@@ -4,15 +4,17 @@
 	"samplerate": 16000,
 	"chunkSecs": 2,
 	"soundDuration": 4,
-	"outPath": "Drip",
-	"recordFormat": "params",
-	"params":
+	"outPath": "NewDrip",
+	"recordFormat": "tfrecords",
+      "tftype": "shards",
+	"shard_size": 2,
+      "params":
 	[
 		{
             "user_pname": "Irregularity",
             "user_minval": 0,
             "user_maxval": 1,
-            "user_nvals": 4,
+            "user_nvals": 10,
             "user_doc": "map to natural synth irregularity param [0, 1]",
             "synth_pname": "irreg_exp",
             "synth_minval": 0,
@@ -20,10 +22,10 @@
             "synth_units": "natural"
         },
 		{
-            "user_pname": "center frequency",
+            "user_pname": "center_frequency",
             "user_minval": 220,
             "user_maxval": 440,
-            "user_nvals": 2,
+            "user_nvals": 10,
             "user_doc": "map to normed synth frequency param [220, 440]",
             "synth_pname": "cf",
             "synth_minval": 220,
@@ -34,7 +36,7 @@
 	"fixedParams":
 	[
 		{
-			"user_doc": "rate of Drips in normalized ranges",
+		"user_doc": "rate of Drips in normalized ranges",
             "synth_pname": "rate_exp",
             "synth_val": 0.6,
             "synth_units": "norm"
